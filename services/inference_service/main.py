@@ -7,23 +7,24 @@ from inference_service.app import create_app
 load_dotenv()
 
 MOCK = os.getenv("MOCK_VERTEX", "false").lower() == "true"
+PORT = int(os.getenv("PORT", "8080"))
 
 client = VertexInferenceClient(
-    project_id=os.environ["GCP_PROJECT_ID"],
+    project_id=os.getenv("GCP_PROJECT_ID", ""),
     region=os.getenv("GCP_REGION", "northamerica-northeast1"),
-    automl_endpoint_id=os.environ["VERTEX_AUTOML_ENDPOINT_ID"],
-    yolov8_endpoint_id=os.environ["VERTEX_YOLOV8_ENDPOINT_ID"],
+    automl_endpoint_id=os.getenv("VERTEX_AUTOML_ENDPOINT_ID", ""),
+    yolov8_endpoint_id=os.getenv("VERTEX_YOLOV8_ENDPOINT_ID", ""),
     mock=MOCK,
 )
 
 app = create_app(
     vertex_client=client,
-    detections_topic=(
-        f"projects/{os.environ['GCP_PROJECT_ID']}"
-        f"/topics/{os.environ['PUBSUB_DETECTIONS_TOPIC']}"
+    detections_topic=os.getenv(
+        "DETECTIONS_TOPIC",
+        f"projects/{os.getenv('GCP_PROJECT_ID', '')}/topics/homevision-detections",
     ),
     mock_pubsub=MOCK,
 )
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=False)
+    uvicorn.run("main:app", host="0.0.0.0", port=PORT, reload=False)
