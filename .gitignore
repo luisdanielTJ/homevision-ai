@@ -9,9 +9,11 @@ venv/
 
 # Terraform
 infra/.terraform/
-infra/*.tfstate
-infra/*.tfstate.backup
-infra/*.tfvars
+infra/**/.terraform/
+**/*.tfstate
+**/*.tfstate.backup
+# tfvars may contain sensitive values — use .example files instead
+infra/environments/
 
 # ML artifacts
 ml/data/raw/
