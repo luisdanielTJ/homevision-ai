@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  inference_service:
+    build: ./services/inference_service
+    ports:
+      - "8081:8080"
+    environment:
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+      - PUBSUB_DETECTIONS_TOPIC=${PUBSUB_DETECTIONS_TOPIC}
+      - VERTEX_AUTOML_ENDPOINT_ID=mock
+      - VERTEX_YOLOV8_ENDPOINT_ID=mock
+      - MOCK_VERTEX=true
+    env_file: .env
+
+  behavior_engine:
+    build: ./services/behavior_engine
+    ports:
+      - "8082:8080"
+    environment:
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+      - PUBSUB_ALERTS_TOPIC=${PUBSUB_ALERTS_TOPIC}
+      - DWELL_THRESHOLD_SECONDS=${DWELL_THRESHOLD_SECONDS:-15}
+      - HEAD_TURN_THRESHOLD=${HEAD_TURN_THRESHOLD:-2}
+      - GEMINI_MODEL=${GEMINI_MODEL}
+      - MOCK_GEMINI=true
+    env_file: .env
+
+  notification_service:
+    build: ./services/notification_service
+    ports:
+      - "8083:8080"
+    environment:
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+      - MOCK_FIRESTORE=true
+    env_file: .env
+
+  dashboard:
+    build: ./dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - NOTIFICATION_WS_URL=ws://notification_service:8080/ws
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+    env_file: .env
