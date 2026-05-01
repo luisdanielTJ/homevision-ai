@@ -1,0 +1,6 @@
+mediapipe==0.10.14
+opencv-python==4.10.0.84
+numpy==1.26.4
+google-cloud-pubsub==2.21.4
+python-dotenv==1.0.1
+pytest==8.2.0

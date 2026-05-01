@@ -1,13 +1,16 @@
-.PHONY: dev test lint infra-init infra-plan infra-apply endpoints-off deploy
+.PHONY: dev test lint install infra-init infra-plan infra-apply endpoints-off deploy
 
 dev:
 	docker compose up --build
 
+install:
+	uv sync --all-groups
+
 test:
-	pytest services/ ml/ -v
+	uv run pytest services/ ml/ -v
 
 lint:
-	ruff check services/ ml/ dashboard/
+	uv run ruff check services/ ml/ dashboard/
 
 infra-init:
 	cd infra && terraform init
