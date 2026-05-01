@@ -7,7 +7,11 @@ load_dotenv()
 
 PROJECT_ID = os.getenv("GCP_PROJECT_ID", "")
 REGION = os.getenv("GCP_REGION", "northamerica-northeast1")
-WS_URL = os.getenv("NOTIFICATION_WS_URL", "ws://localhost:8083/ws")
+_notif_url = os.getenv("NOTIFICATION_SERVICE_URL", "http://localhost:8083")
+WS_URL = os.getenv(
+    "NOTIFICATION_WS_URL",
+    _notif_url.replace("https://", "wss://").replace("http://", "ws://") + "/ws",
+)
 
 st.set_page_config(page_title="HomeVision AI", layout="wide")
 st.title("HomeVision AI — Customer Assistance Detection")
