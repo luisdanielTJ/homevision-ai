@@ -10,7 +10,8 @@ load_dotenv()
 
 PROJECT_ID = os.getenv("GCP_PROJECT_ID", "")
 REGION = os.getenv("GCP_REGION", "northamerica-northeast1")
-MOCK = os.getenv("MOCK_GEMINI", "false").lower() == "true"
+MOCK_GEMINI = os.getenv("MOCK_GEMINI", "false").lower() == "true"
+MOCK_PUBSUB = os.getenv("MOCK_PUBSUB", "false").lower() == "true"
 PORT = int(os.getenv("PORT", "8080"))
 
 app = create_app(
@@ -19,12 +20,16 @@ app = create_app(
         dwell_threshold=float(os.getenv("DWELL_THRESHOLD_SECONDS", "15")),
         head_turn_threshold=int(os.getenv("HEAD_TURN_THRESHOLD", "2")),
     ),
-    enricher=GeminiEnricher(project_id=PROJECT_ID, region=REGION, mock=MOCK),
+    enricher=GeminiEnricher(
+        project_id=PROJECT_ID,
+        region=os.getenv("GEMINI_REGION", "us-central1"),
+        mock=MOCK_GEMINI,
+    ),
     alerts_topic=os.getenv(
         "ALERTS_TOPIC",
         f"projects/{PROJECT_ID}/topics/homevision-alerts",
     ),
-    mock_pubsub=MOCK,
+    mock_pubsub=MOCK_PUBSUB,
 )
 
 if __name__ == "__main__":

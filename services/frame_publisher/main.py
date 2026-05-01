@@ -11,11 +11,12 @@ PROJECT_ID = os.environ["GCP_PROJECT_ID"]
 TOPIC_NAME = os.environ["PUBSUB_RAW_FRAMES_TOPIC"]
 TARGET_FPS = float(os.getenv("FRAME_FPS", "2"))
 CAMERA_ID = os.getenv("CAMERA_ID", "cam0")
+CAMERA_INDEX = int(os.getenv("CAMERA_INDEX", "0"))
 FRAME_DELAY = 1.0 / TARGET_FPS
 
 
 def main() -> None:
-    cap = WebcamCapture()
+    cap = WebcamCapture(device_index=CAMERA_INDEX)
     extractor = MediaPipeExtractor()
     publisher = FramePublisher.from_env(PROJECT_ID, TOPIC_NAME)
     print(f"HomeVision frame publisher started at {TARGET_FPS} FPS → topic: {TOPIC_NAME}")

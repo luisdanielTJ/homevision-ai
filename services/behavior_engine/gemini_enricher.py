@@ -21,11 +21,11 @@ class GeminiEnricher:
     ) -> None:
         self._mock = mock
         if not mock:
-            import vertexai
-            from vertexai.generative_models import GenerativeModel
-
-            vertexai.init(project=project_id, location=region)
-            self._model = GenerativeModel(model)
+            import os
+            import google.generativeai as genai
+            api_key = os.environ["GEMINI_API_KEY"].strip()
+            genai.configure(api_key=api_key)
+            self._model = genai.GenerativeModel(model)
 
     def enrich(self, camera_id: str, dwell_time: float, head_turns: int, object_raised: bool) -> str:
         if self._mock:
