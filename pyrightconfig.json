@@ -1,0 +1,11 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonVersion": "3.12",
+  "extraPaths": [
+    "services/frame_publisher",
+    "services/inference_service",
+    "services/behavior_engine",
+    "services/notification_service"
+  ]
+}
