@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.venv/
+venv/
+.env
+
+# Terraform
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.backup
+infra/*.tfvars
+
+# ML artifacts
+ml/data/raw/
+ml/training/yolov8/runs/
+*.pt
+*.onnx
+
+# GCP credentials
+*-service-account.json
+application_default_credentials.json
